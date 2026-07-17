@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getTenantSettings, updateTenantSettings, uploadTenantBranding, getUserSettings, updateUserSettings, changePassword } from "@/lib/api";
+import { getApiBaseUrl, getTenantSettings, updateTenantSettings, uploadTenantBranding, getUserSettings, updateUserSettings, changePassword } from "@/lib/api";
+
+const getImageUrl = (url: string) => url.startsWith("http") ? url : `${getApiBaseUrl()}${url}`;
 import { useSession } from "@/lib/use-session";
 import { AppShell } from "@/components/layout/app-shell";
 
@@ -111,7 +113,7 @@ export function SettingsManagement() {
                 <div><label className="block text-sm">Phone</label><input className="border w-full p-2 rounded" value={tenant.phone || ""} onChange={e => setTenant({...tenant, phone: e.target.value})} /></div>
                 <div><label className="block text-sm">Address</label><input className="border w-full p-2 rounded" value={tenant.address || ""} onChange={e => setTenant({...tenant, address: e.target.value})} /></div>
                 <div><label className="block text-sm">Upload Logo</label><input type="file" accept="image/*" onChange={(e) => handleUpload("logo", e)} className="border w-full p-2 rounded" /></div>
-                {tenant.logo_url && <img src={`http://127.0.0.1:8000${tenant.logo_url}`} className="h-16" alt="Logo" />}
+                {tenant.logo_url && <img src={getImageUrl(tenant.logo_url)} className="h-16" alt="Logo" />}
                 <button onClick={handleTenantSave} className="bg-indigo-600 text-white px-4 py-2 rounded">Save Company Profile</button>
               </div>
             )}
@@ -124,9 +126,9 @@ export function SettingsManagement() {
                 <div><label className="block text-sm">Punch Prefix</label><input className="border w-full p-2 rounded" value={tenant.punch_prefix || ""} onChange={e => setTenant({...tenant, punch_prefix: e.target.value})} /></div>
                 <div><label className="block text-sm">Inspection Prefix</label><input className="border w-full p-2 rounded" value={tenant.inspection_prefix || ""} onChange={e => setTenant({...tenant, inspection_prefix: e.target.value})} /></div>
                 <div><label className="block text-sm">Upload Stamp</label><input type="file" accept="image/*" onChange={(e) => handleUpload("stamp", e)} className="border w-full p-2 rounded" /></div>
-                {tenant.company_stamp_url && <img src={`http://127.0.0.1:8000${tenant.company_stamp_url}`} className="h-16" alt="Stamp" />}
+                {tenant.company_stamp_url && <img src={getImageUrl(tenant.company_stamp_url)} className="h-16" alt="Stamp" />}
                 <div><label className="block text-sm">Upload Signature</label><input type="file" accept="image/*" onChange={(e) => handleUpload("signature", e)} className="border w-full p-2 rounded" /></div>
-                {tenant.authorized_signature_url && <img src={`http://127.0.0.1:8000${tenant.authorized_signature_url}`} className="h-16" alt="Signature" />}
+                {tenant.authorized_signature_url && <img src={getImageUrl(tenant.authorized_signature_url)} className="h-16" alt="Signature" />}
                 <button onClick={handleTenantSave} className="bg-indigo-600 text-white px-4 py-2 rounded">Save Branding</button>
               </div>
             )}

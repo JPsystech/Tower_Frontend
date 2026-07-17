@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getReports, generateFirstInspectionReport, generatePunchPointReport } from "@/lib/api";
+import { getApiBaseUrl, getReports, generateFirstInspectionReport, generatePunchPointReport } from "@/lib/api";
 import { useSession } from "@/lib/use-session";
 import { AppShell } from "@/components/layout/app-shell";
 import { Download, FileText } from "lucide-react";
@@ -94,7 +94,7 @@ export function ReportsManagement() {
                     <td className="px-6 py-4">{new Date(r.generated_at).toLocaleString()}</td>
                     <td className="px-6 py-4">
                       <a
-                        href={`http://127.0.0.1:8000${r.file_url}`}
+                        href={r.file_url.startsWith('http') ? r.file_url : `${getApiBaseUrl()}${r.file_url}`}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-medium"
