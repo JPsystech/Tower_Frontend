@@ -214,7 +214,12 @@ export function InspectionJobDetail({ jobId }: { jobId: number }) {
                                     <p className="text-xs text-gray-500 mb-1">Issue Photos</p>
                                     <div className="flex gap-2">
                                       {pp.original_photos.map((p: any) => (
-                                        <img key={p.id} src={getImageUrl(p.photo_url)} alt="Issue Photo" className="h-16 w-16 object-cover rounded border border-red-200" />
+                                        <a key={p.id} href={getImageUrl(p.photo_url)} target="_blank" rel="noopener noreferrer" className="block relative group">
+                                          <img src={getImageUrl(p.photo_url)} alt="Issue Photo" className="h-16 w-16 object-cover rounded border border-red-200 group-hover:opacity-80 transition-opacity" />
+                                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded">
+                                            <span className="text-white text-xs font-bold drop-shadow-md">Open</span>
+                                          </div>
+                                        </a>
                                       ))}
                                     </div>
                                   </div>
@@ -224,7 +229,12 @@ export function InspectionJobDetail({ jobId }: { jobId: number }) {
                                     <p className="text-xs text-gray-500 mb-1">Resolution Photos</p>
                                     <div className="flex gap-2">
                                       {pp.closure_photos.map((p: any) => (
-                                        <img key={p.id} src={getImageUrl(p.photo_url)} alt="Resolution Photo" className="h-16 w-16 object-cover rounded border border-green-200" />
+                                        <a key={p.id} href={getImageUrl(p.photo_url)} target="_blank" rel="noopener noreferrer" className="block relative group">
+                                          <img src={getImageUrl(p.photo_url)} alt="Resolution Photo" className="h-16 w-16 object-cover rounded border border-green-200 group-hover:opacity-80 transition-opacity" />
+                                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded">
+                                            <span className="text-white text-xs font-bold drop-shadow-md">Open</span>
+                                          </div>
+                                        </a>
                                       ))}
                                     </div>
                                   </div>
@@ -295,7 +305,12 @@ export function InspectionJobDetail({ jobId }: { jobId: number }) {
                                 {r.photos && r.photos.length > 0 && (
                                   <div className="flex gap-2 mt-2">
                                     {r.photos.map((p: any) => (
-                                      <img key={p.id} src={getImageUrl(p.photo_url)} alt="Response Photo" className="h-16 w-16 object-cover rounded border border-gray-200" />
+                                      <a key={p.id} href={getImageUrl(p.photo_url)} target="_blank" rel="noopener noreferrer" className="block relative group">
+                                        <img src={getImageUrl(p.photo_url)} alt="Response Photo" className="h-16 w-16 object-cover rounded border border-gray-200 group-hover:opacity-80 transition-opacity" />
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-20 rounded">
+                                          <span className="text-white text-xs font-bold drop-shadow-md">Open</span>
+                                        </div>
+                                      </a>
                                     ))}
                                   </div>
                                 )}
