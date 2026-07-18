@@ -217,29 +217,47 @@ export function InspectionJobDetail({ jobId }: { jobId: number }) {
                 <p className="text-sm text-gray-500">No responses recorded yet.</p>
               ) : (
                 <div className="space-y-3">
-                  {responses.map(r => (
-                    <div key={r.id} className="p-3 bg-slate-50 border border-slate-100 rounded flex justify-between items-center">
-                      <div>
-                        <span className="text-xs text-gray-400 block font-semibold uppercase tracking-wider mb-1">
-                          {r.item?.component_type ? `${r.item.component_type} • ` : ''}Item ID: {r.checklist_item_id}
-                        </span>
-                        <p className="font-semibold text-slate-800 mb-1">{r.item?.item_text || `Item #${r.checklist_item_id}`}</p>
-                        <p className="text-sm font-medium">{r.answer_status === "PASS" ? "Passed" : r.answer_status === "FAIL" ? "Failed" : r.answer_status}</p>
-                        {r.remarks && <p className="text-xs text-gray-600">Note: {r.remarks}</p>}
-                        
-                        {r.photos && r.photos.length > 0 && (
-                          <div className="flex gap-2 mt-2">
-                            {r.photos.map((p: any) => (
-                              <img key={p.id} src={getImageUrl(p.photo_url)} alt="Response Photo" className="h-16 w-16 object-cover rounded border border-gray-200" />
-                            ))}
-                          </div>
-                        )}
+                  {(() => {
+                    const groupedResponses = responses.reduce((acc: any, curr: any) => {
+                      const sectionName = curr.item?.section?.section_name || "General Section";
+                      if (!acc[sectionName]) acc[sectionName] = [];
+                      acc[sectionName].push(curr);
+                      return acc;
+                    }, {});
+
+                    return Object.entries(groupedResponses).map(([sectionName, sectionResponses]: [string, any]) => (
+                      <div key={sectionName} className="space-y-3">
+                        <div className="bg-slate-100 px-3 py-2 rounded-md border border-slate-200 shadow-sm flex items-center">
+                          <h3 className="font-bold text-slate-700 text-sm tracking-wide">{sectionName}</h3>
+                        </div>
+                        <div className="space-y-3">
+                          {sectionResponses.map((r: any) => (
+                            <div key={r.id} className="p-3 bg-white border border-slate-200 rounded flex justify-between items-center shadow-sm">
+                              <div>
+                                <span className="text-xs text-gray-400 block font-semibold uppercase tracking-wider mb-1">
+                                  {r.item?.component_type ? `${r.item.component_type} • ` : ''}Item ID: {r.checklist_item_id}
+                                </span>
+                                <p className="font-semibold text-slate-800 mb-1">{r.item?.item_text || `Item #${r.checklist_item_id}`}</p>
+                                <p className="text-sm font-medium">{r.answer_status === "PASS" ? "Passed" : r.answer_status === "FAIL" ? "Failed" : r.answer_status}</p>
+                                {r.remarks && <p className="text-xs text-gray-600">Note: {r.remarks}</p>}
+                                
+                                {r.photos && r.photos.length > 0 && (
+                                  <div className="flex gap-2 mt-2">
+                                    {r.photos.map((p: any) => (
+                                      <img key={p.id} src={getImageUrl(p.photo_url)} alt="Response Photo" className="h-16 w-16 object-cover rounded border border-gray-200" />
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                {r.answer_status === "PASS" ? <CheckCircle className="text-green-500 w-5 h-5" /> : <XCircle className="text-red-500 w-5 h-5" />}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div>
-                        {r.answer_status === "PASS" ? <CheckCircle className="text-green-500 w-5 h-5" /> : <XCircle className="text-red-500 w-5 h-5" />}
-                      </div>
-                    </div>
-                  ))}
+                    ));
+                  })()}
                 </div>
               )}
             </CardContent>
