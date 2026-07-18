@@ -10,6 +10,7 @@ export function PunchPointsManagement() {
   const [punchPoints, setPunchPoints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPP, setSelectedPP] = useState<any | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -71,14 +72,25 @@ export function PunchPointsManagement() {
                   <p className="font-medium text-slate-800 mb-2 text-sm">Issue Photos</p>
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {selectedPP.original_photos.map((photo: any) => (
-                      <img key={photo.id} src={getImageUrl(photo.photo_url)} alt="Issue" className="h-48 w-48 object-cover rounded border flex-shrink-0" />
+                      <img 
+                        key={photo.id} 
+                        src={getImageUrl(photo.photo_url)} 
+                        alt="Issue" 
+                        className="h-48 w-48 object-cover rounded border flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity" 
+                        onClick={() => setLightboxImage(getImageUrl(photo.photo_url))}
+                      />
                     ))}
                   </div>
                 </div>
               ) : selectedPP.issue_photo_url ? (
                 <div className="mt-4">
                   <p className="font-medium text-slate-800 mb-2 text-sm">Issue Photo</p>
-                  <img src={getImageUrl(selectedPP.issue_photo_url)} alt="Issue" className="w-full h-48 object-cover rounded border" />
+                  <img 
+                    src={getImageUrl(selectedPP.issue_photo_url)} 
+                    alt="Issue" 
+                    className="w-full h-48 object-cover rounded border cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setLightboxImage(getImageUrl(selectedPP.issue_photo_url))}
+                  />
                 </div>
               ) : (
                 <div className="mt-4 w-full h-48 bg-slate-100 border rounded flex items-center justify-center text-slate-400 text-sm">
@@ -109,14 +121,25 @@ export function PunchPointsManagement() {
                   <p className="font-medium text-slate-800 mb-2 text-sm">Resolution Photos</p>
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {selectedPP.closure_photos.map((photo: any) => (
-                      <img key={photo.id} src={getImageUrl(photo.photo_url)} alt="Resolution" className="h-48 w-48 object-cover rounded border flex-shrink-0" />
+                      <img 
+                        key={photo.id} 
+                        src={getImageUrl(photo.photo_url)} 
+                        alt="Resolution" 
+                        className="h-48 w-48 object-cover rounded border flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity" 
+                        onClick={() => setLightboxImage(getImageUrl(photo.photo_url))}
+                      />
                     ))}
                   </div>
                 </div>
               ) : selectedPP.resolution_photo_url ? (
                 <div className="mt-4">
                   <p className="font-medium text-slate-800 mb-2 text-sm">Resolution Photo</p>
-                  <img src={getImageUrl(selectedPP.resolution_photo_url)} alt="Resolution" className="w-full h-48 object-cover rounded border" />
+                  <img 
+                    src={getImageUrl(selectedPP.resolution_photo_url)} 
+                    alt="Resolution" 
+                    className="w-full h-48 object-cover rounded border cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setLightboxImage(getImageUrl(selectedPP.resolution_photo_url))}
+                  />
                 </div>
               ) : (
                 <div className="mt-4 w-full h-48 bg-slate-100 border rounded flex items-center justify-center text-slate-400 text-sm">
@@ -126,6 +149,29 @@ export function PunchPointsManagement() {
             </div>
           </div>
         </div>
+
+        {/* Lightbox Modal */}
+        {lightboxImage && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+            onClick={() => setLightboxImage(null)}
+          >
+            <div className="relative max-w-4xl w-full h-full flex items-center justify-center">
+              <button 
+                className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full p-2"
+                onClick={() => setLightboxImage(null)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+              <img 
+                src={lightboxImage} 
+                alt="Enlarged" 
+                className="max-w-full max-h-[90vh] object-contain rounded-md shadow-2xl" 
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+        )}
       </AppShell>
     );
   }

@@ -15,6 +15,7 @@ export function ReinspectionScreen({ jobId }: { jobId: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<number | null>(null);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   
   // Local state for edits
   const [edits, setEdits] = useState<Record<number, { remark: string }>>({});
@@ -133,7 +134,8 @@ export function ReinspectionScreen({ jobId }: { jobId: string }) {
                           key={photo.id} 
                           src={getImageUrl(photo.photo_url)} 
                           alt="Original" 
-                          className="h-20 w-20 object-cover rounded border border-slate-200"
+                          className="h-20 w-20 object-cover rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => setLightboxImage(getImageUrl(photo.photo_url))}
                         />
                       ))}
                     </div>
@@ -163,7 +165,8 @@ export function ReinspectionScreen({ jobId }: { jobId: string }) {
                           key={photo.id} 
                           src={getImageUrl(photo.photo_url)} 
                           alt="Closure" 
-                          className="h-16 w-16 object-cover rounded border border-slate-200"
+                          className="h-16 w-16 object-cover rounded border border-slate-200 cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => setLightboxImage(getImageUrl(photo.photo_url))}
                         />
                       ))}
                     </div>
@@ -193,6 +196,29 @@ export function ReinspectionScreen({ jobId }: { jobId: string }) {
             </div>
           </Card>
         ))
+      )}
+      
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setLightboxImage(null)}
+        >
+          <div className="relative max-w-4xl w-full h-full flex items-center justify-center">
+            <button 
+              className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/80 rounded-full p-2"
+              onClick={() => setLightboxImage(null)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <img 
+              src={lightboxImage} 
+              alt="Enlarged" 
+              className="max-w-full max-h-[90vh] object-contain rounded-md shadow-2xl" 
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
