@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiRequest } from "@/lib/api";
+import { Pencil, Trash2 } from "lucide-react";
 import type { Tenant, User } from "@/lib/types";
 
 const emptyForm = {
@@ -122,6 +123,16 @@ export function UserManagement() {
     }
   }
 
+  async function handleDelete(id: number) {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await apiRequest(`/users/${id}`, { method: "DELETE" });
+      await loadData();
+    } catch (err: any) {
+      alert(err.message || "Failed to delete");
+    }
+  }
+
   return (
     <AppShell
       title="User Master"
@@ -147,7 +158,7 @@ export function UserManagement() {
                     <th className="py-3 pr-4">Email</th>
                     <th className="py-3 pr-4">Roles</th>
                     <th className="py-3 pr-4">Status</th>
-                    <th className="py-3 text-right">Action</th>
+                    <th className="py-3 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -168,9 +179,12 @@ export function UserManagement() {
                         </div>
                       </td>
                       <td className="py-3 pr-4">{user.status}</td>
-                      <td className="py-3 text-right">
+                      <td className="py-3 text-right space-x-2">
                         <Button variant="ghost" size="sm" onClick={() => selectUser(user)}>
-                          Edit
+                          <Pencil className="w-4 h-4 text-blue-600" />
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(user.id)}>
+                          <Trash2 className="w-4 h-4 text-red-600" />
                         </Button>
                       </td>
                     </tr>

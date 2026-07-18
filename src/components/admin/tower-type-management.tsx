@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiRequest } from "@/lib/api";
+import { Pencil, Trash2 } from "lucide-react";
 
 export type TowerType = {
   id: number;
@@ -100,6 +101,16 @@ export function TowerTypeManagement() {
     }
   }
 
+  async function handleDelete(id: number) {
+    if (!confirm("Are you sure you want to delete this tower type?")) return;
+    try {
+      await apiRequest(`/tower-types/${id}`, { method: "DELETE" });
+      await load();
+    } catch (err: any) {
+      alert(err.message || "Failed to delete");
+    }
+  }
+
   return (
     <AppShell title="Tower Type Master" allowedRoles={["SUPER_ADMIN", "TENANT_ADMIN", "ADMIN"]}>
       <div className="grid gap-3 xl:grid-cols-[1.4fr_1fr]">
@@ -120,6 +131,7 @@ export function TowerTypeManagement() {
                       <th className="px-4 py-2 font-semibold">Code</th>
                       <th className="px-4 py-2 font-semibold">Description</th>
                       <th className="px-4 py-2 text-left font-semibold">Status</th>
+                      <th className="px-4 py-2 text-right font-semibold">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -132,6 +144,14 @@ export function TowerTypeManagement() {
                           <span className={`px-2 py-0.5 rounded text-xs font-medium ${tt.status === "ACTIVE" ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-800"}`}>
                             {tt.status}
                           </span>
+                        </td>
+                        <td className="px-4 py-2 text-right space-x-2">
+                          <button onClick={() => selectItem(tt)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="Edit">
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => handleDelete(tt.id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </td>
                       </tr>
                     ))}

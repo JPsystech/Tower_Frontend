@@ -5,6 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { apiRequest } from "@/lib/api";
 import { useSession } from "@/lib/use-session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pencil, Trash2 } from "lucide-react";
 
 export function EngineerManagement() {
   const { session } = useSession();
@@ -59,6 +60,16 @@ export function EngineerManagement() {
       handleReset();
       load();
     } catch (err: any) { alert(err.message || "An error occurred"); }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this engineer?")) return;
+    try {
+      await apiRequest(`/engineers/${id}`, { method: "DELETE" });
+      load();
+    } catch (err: any) {
+      alert(err.message || "Failed to delete");
+    }
   };
 
   const handleEdit = (eng: any) => {
@@ -149,6 +160,7 @@ export function EngineerManagement() {
                 <th className="px-4 py-2 font-semibold">Name</th>
                 <th className="px-4 py-2 font-semibold">Email</th>
                 <th className="px-4 py-2 font-semibold">Designation</th>
+                <th className="px-4 py-2 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -165,6 +177,14 @@ export function EngineerManagement() {
                     <td className="px-4 py-2">{e.full_name}</td>
                     <td className="px-4 py-2 text-slate-500">{e.email}</td>
                     <td className="px-4 py-2">{e.designation}</td>
+                    <td className="px-4 py-2 text-right space-x-2">
+                      <button onClick={() => handleEdit(e)} className="p-1.5 text-blue-600 hover:bg-blue-50 rounded transition-colors" title="Edit">
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleDelete(e.id)} className="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
