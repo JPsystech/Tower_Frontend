@@ -220,7 +220,10 @@ export function InspectionJobDetail({ jobId }: { jobId: number }) {
                   {responses.map(r => (
                     <div key={r.id} className="p-3 bg-slate-50 border border-slate-100 rounded flex justify-between items-center">
                       <div>
-                        <span className="text-xs text-gray-400 block">Item ID: {r.checklist_item_id}</span>
+                        <span className="text-xs text-gray-400 block font-semibold uppercase tracking-wider mb-1">
+                          {r.item?.component_type ? `${r.item.component_type} • ` : ''}Item ID: {r.checklist_item_id}
+                        </span>
+                        <p className="font-semibold text-slate-800 mb-1">{r.item?.item_text || `Item #${r.checklist_item_id}`}</p>
                         <p className="text-sm font-medium">{r.answer_status === "PASS" ? "Passed" : r.answer_status === "FAIL" ? "Failed" : r.answer_status}</p>
                         {r.remarks && <p className="text-xs text-gray-600">Note: {r.remarks}</p>}
                         
